@@ -81,7 +81,9 @@ body {
   color: #fbf1c7;
   padding: 1.5rem 2rem;
   font-size: 2rem;
-  width: 100%;
+  width: 90%;
+  border-radius: 4px;
+  margin-bottom: 2rem;
   cursor: pointer;
 }
 .btn-clear:hover {
