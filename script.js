@@ -13,10 +13,24 @@ function divide(firstNum, secondNum) {
   return firstNum / secondNum;
 }
 
-let numberOne = 2;
+let displayValue = [];
 let operator = `+`;
-let numberTwo = 3;
 
 function operate(firstNum, secondNum) {
   return multiply(firstNum, secondNum);
 }
+
+const calcResult = document.getElementById("calc-result");
+const btn = document.querySelectorAll(".btn");
+// Select number value
+btn.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    let numValue = Number(btn.innerText);
+    if (isNaN(numValue)) return;
+    if (numValue <= 9 && numValue >= 0) {
+      // I really tried hard to remember this solution
+      displayValue.push(numValue);
+      calcResult.innerText = displayValue.join("");
+    }
+  });
+});
