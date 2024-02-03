@@ -1,4 +1,4 @@
 # calculator
 On-screen calculator 
 
-- [👉live demo](https://github.com/fathyElgazar/calculator)
+- [👉live demo](https://fathyElgazar.github.io/calculator)
