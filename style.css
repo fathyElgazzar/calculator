@@ -96,3 +96,24 @@ body {
 .btn-clear:hover {
   background-color: #14777c;
 }
+
+/* Author  */
+.author {
+  font-size: 1.5rem;
+  margin-top: 3rem;
+  text-align: center;
+}
+.author_link:link,
+.author_link:visited {
+  font-size: 1.8rem;
+  text-decoration: none;
+  color: #14777c;
+  transition: all 0.1s;
+  border-bottom: 1px solid #fbf1c7;
+}
+
+.author_link:hover,
+.author_link:active {
+  font-size: 1.8rem;
+  color: #458588;
+}
