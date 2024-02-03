@@ -1,12 +1,18 @@
 "use strict";
+const calcResult = document.getElementById("calc-result");
+const digits = document.querySelectorAll(".digit");
+const signs = document.querySelectorAll(".sign");
+const clearBtn = document.getElementById("btn-clear");
+const equalBtn = document.getElementById("equal");
+let operator, firstNum, secondNum, result;
 
 // basic functions
-const add = function (a, b) {
-  return a + b;
+const add = function (firstNum, secondNum) {
+  return firstNum + secondNum;
 };
 
-const subtract = function (a, b) {
-  return a - b;
+const subtract = function (firstNum, secondNum) {
+  return firstNum - secondNum;
 };
 
 function multiply(firstNum, secondNum) {
@@ -14,14 +20,13 @@ function multiply(firstNum, secondNum) {
 }
 
 function divide(firstNum, secondNum) {
-  if (secondNum === 0) return (calcResult.innerText = "OOPS");
-  return firstNum / secondNum;
+  return secondNum === 0 ? "Infiniy" : firstNum / secondNum;
 }
 
-let displayValue = [];
-let operator, firstNum, secondNum, index, result;
-
 function operate(operator, firstNum, secondNum) {
+  if (!operator) return (calcResult.innerText = "Input a valid operator!");
+  firstNum = Number(firstNum);
+  secondNum = Number(secondNum);
   switch (operator) {
     case "plus":
       return add(firstNum, secondNum);
@@ -36,43 +41,48 @@ function operate(operator, firstNum, secondNum) {
   }
 }
 
-function evaluate() {
-  if (!operator) return (calcResult.innerText = "Input a valid operator!");
-  if (!firstNum) {
-    firstNum = Number(displayValue.slice(0, index).join(""));
-  }
-  secondNum = Number(displayValue.slice(index + 1).join(""));
-  result = operate(operator, firstNum, secondNum);
-  if (result % 1 === 0) {
-    calcResult.innerText = result;
-  } else calcResult.innerText = result.toFixed(2);
-  return (firstNum = result);
-}
-
 function clearResult() {
-  displayValue = [];
-  firstNum = 0;
+  firstNum = undefined;
+  secondNum = undefined;
   calcResult.innerText = "0";
   operator = undefined;
 }
 
-// Elements
-const calcResult = document.getElementById("calc-result");
-const digits = document.querySelectorAll(".digit");
-const signs = document.querySelectorAll(".sign");
-const clearBtn = document.getElementById("btn-clear");
-const equalBtn = document.getElementById("equal");
+function limitResult() {
+  if (result % 1 === 0) {
+    calcResult.textContent = result;
+  } else {
+    calcResult.textContent = result.toFixed(2);
+  }
+}
+
+function decimalPoint() {
+  if (
+    !calcResult.textContent.includes(".") &&
+    !calcResult.textContent.includes("Infinity")
+  ) {
+    calcResult.textContent = calcResult.textContent.concat(".");
+  }
+}
 
 // Event listeners
-// get the sign value and store it into `operator`
 signs.forEach((sign) =>
   sign.addEventListener("click", function (e) {
-    let signValue = e.target.innerText;
-    displayValue.push(signValue);
-    index = displayValue.findIndex((value) => value === signValue);
-    // firstNum = calcResult.innerText;
-
-    operator = e.target.id;
+    if (firstNum === undefined || firstNum === "") {
+      operator = e.target.id;
+      firstNum = calcResult.textContent;
+      calcResult.textContent = "0";
+    } else if (secondNum === undefined || secondNum === "") {
+      secondNum = calcResult.textContent;
+      result = operate(operator, firstNum, secondNum);
+      calcResult.textContent = result;
+      firstNum = calcResult.textContent;
+      secondNum = "";
+      operator = e.target.id;
+      limitResult();
+    } else {
+      calcResult.textContent = "0";
+    }
   })
 );
 
@@ -80,25 +90,32 @@ signs.forEach((sign) =>
 // display the digits on the screen
 digits.forEach((btn) => {
   btn.addEventListener("click", () => {
-    let numValue = Number(btn.innerText);
-    // console.log(numValue);
-    if (isNaN(numValue)) numValue = ".";
-    if ((numValue <= 9 && numValue >= 0) || numValue === ".") {
-      // I really tried hard to remember this solution
-      displayValue.push(numValue);
+    // console.log("result", result);
 
-      // calcResult.innerText = displayValue
-      //   .filter((item) => typeof item === "number" || item === ".")
-      //   .join("");
-      calcResult.innerText = displayValue.join("");
+    if (
+      calcResult.textContent === "Infinity" ||
+      calcResult.textContent == result ||
+      calcResult.textContent === "-Infinity" ||
+      calcResult.textContent === "0"
+    ) {
+      result = "";
+      calcResult.textContent = btn.innerText;
+    } else {
+      calcResult.textContent += btn.innerText;
     }
   });
 });
 
 // Eval the expression and clear the values
 equalBtn.addEventListener("click", (e) => {
-  evaluate();
-  displayValue = [];
+  if (result == "" || firstNum !== undefined || firstNum !== "") {
+    secondNum = calcResult.textContent;
+    result = operate(operator, firstNum, secondNum);
+    calcResult.textContent = result;
+    firstNum = "";
+    secondNum = "";
+    limitResult();
+  }
 });
 
 clearBtn.addEventListener("click", clearResult);
