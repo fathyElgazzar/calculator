@@ -2,7 +2,7 @@
 
 On-screen calculator
 
-- [👉live demo](https://fathyElgazzar.github.io/calculator)
+- [👉live demo](https://gazzaar.github.io/calculator)
 
 ### What I have leaerned in this project?
 
